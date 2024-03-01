@@ -1,5 +1,8 @@
 #include <Arduino.h>
+#include "Car.h"
 
-void setup() {}
+void setup() {
+    Car *car = Car::GetInstance();
+}
 
 void loop() {}
