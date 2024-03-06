@@ -30,7 +30,8 @@ void PID_Controller::UpdateOutput() {
     D = kd_ * error_diff_;
     if (abs(P) > I_range_ || Sign(error_integral_) != Sign(error_current_) || abs(error_current_) < error_tolerance_)) {
         error_integral_ = 0;
-    } else {
+    }
+    else {
         error_integral_ += error_current_;
         I = ki_ * error_integral_;
         if (abs(I) > I_max_) {

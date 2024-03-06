@@ -1,6 +1,8 @@
 #ifndef _CHASSIS_H
 #define _CHASSIS_H
 
+#include "Geometry.h"
+
 /// @brief 底盘类，控制小车运动
 /// @date 2024.03.01
 class Chassis {
@@ -28,8 +30,22 @@ private:
         }
     };
 
-    // 电机转速 (percent 0-100)
-    float motor_speed_[4]{0, 0, 0, 0};
+    // 电机转速 (percent 0~100)
+    double motor_speed_[4]{0, 0, 0, 0};
+
+    // 运动速度信息
+    // ---------------------------------------------
+
+    // Y轴速度 (percent -100~100)
+    double speed_Y_ = 0;
+
+    // X轴速度 (percent -100~100)
+    double speed_X_ = 0;
+
+    // 旋转速度，逆时针为正 (percent -100~100)
+    double speed_Rotate_ = 0;
+
+    // ---------------------------------------------
 
     // 底层驱动函数模块
     // ---------------------------------------------
@@ -46,17 +62,8 @@ private:
     // 设置电机转速，自动归一化
     void SetMotorSpeed(double FL, double FR, double BL, double BR);
 
-    /// @todo 平移+旋转模型解算
-    // /// @brief 沿指定方向直线移动，方向表示为为y轴正半轴极坐标
-    // /// @note 基础函数，无PID
-    // /// @param speed 移动速度(percent)
-    // /// @param angleTar 目标方向(radians)
-    // void LineMoveByAngle_Base(float speed, float angleTar);
-
-    // /// @brief 绕中心旋转
-    // /// @note 基础函数，无PID
-    // /// @param speed 旋转速度(percent)，逆时针为正，顺时针为负
-    // void Rotate_Base(float speed);
+    // 应用电机转速
+    void ApplyMotorSpeed();
 
     // ---------------------------------------------
 
@@ -70,11 +77,20 @@ public:
     // 控制函数
     // ---------------------------------------------
 
+    /// @brief 设置平移状态
+    /// @param dir 平移方向，二维向量 (x, y)
+    /// @param speed 平移速度 (percent 0~100)
+    void SetMove(Vector2D dir, double speed);
+
+    /// @brief 设置旋转状态
+    /// @param speed 旋转速度 (percent -100~100)，逆时针为正
+    void SetRotate(double speed);
+
     // 刹车
     void Stop();
 
-    // 刷新电机转速
-    void UpdateMotorSpeed();
+    // 根据设置底盘速度刷新电机转速
+    void UpdateChassis();
 
     // ---------------------------------------------
 };

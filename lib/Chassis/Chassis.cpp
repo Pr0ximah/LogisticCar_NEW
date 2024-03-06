@@ -1,5 +1,7 @@
 #include "Chassis.h"
 
+#include <math.h>
+
 Chassis *Chassis::instance_ptr_ = nullptr;
 
 Chassis::Chassis() {
@@ -81,36 +83,37 @@ void Chassis::SetMotorSpeed(double FL, double FR, double BL, double BR) {
     motor_speed_ = {FL, FR, BL, BR};
 }
 
-void Chassis::Stop() { SetMotorSpeed(0, 0, 0, 0); }
+void Chassis::Stop() {
+    speed_X_ = 0;
+    speed_Y_ = 0;
+    speed_Rotate_ = 0;
+    SetMotorSpeed(0, 0, 0, 0);
+}
 
-void Chassis::UpdateMotorSpeed() {
+void Chassis::ApplyMotorSpeed() {
     MotorSpinFL(motor_speed_[0]);
     MotorSpinFR(motor_speed_[1]);
     MotorSpinBL(motor_speed_[2]);
     MotorSpinBR(motor_speed_[3]);
 }
 
-/// @todo 平移+旋转模型解算
-// --------------------------------------------------------------------------
-// void Chassis::LineMoveByAngle_Base(float speed, float angleTar) {
-//     float trans_Angle = dirAngle + PI / 4;  // 角度换算
-//     double v_FL, v_FR, v_BL, v_BR;          // 左前和右后一致 右前和左后一致
-//     v_FL = speed * cos(trans_Angle);
-//     v_BR = speed * cos(trans_Angle);
-//     v_FR = speed * sin(trans_Angle);
-//     v_BL = speed * sin(trans_Angle);
+void Chassis::UpdateChassis() {
+    double FL = 0, FR = 0, BL = 0, BR = 0;
 
-//     SetMotorSpeed(v_FL, v_FR, v_BL, v_BR);
-// }
+    // 运动解算
+    FL += (speed_Y_ + speed_X_ - speed_Rotate_);
+    FR += (speed_Y_ - speed_X_ + speed_Rotate_);
+    BL += (speed_Y_ - speed_X_ - speed_Rotate_);
+    BR += (speed_Y_ + speed_X_ + speed_Rotate_);
 
-// void Chassis::LineMoveByAngle_Base(float speed, float angleTar) {
-//     float trans_Angle = dirAngle + PI / 4;  // 角度换算
-//     double v_FL, v_FR, v_BL, v_BR;          // 左前和左后一致 右前和右后一致
-//     v_FL = -speed;
-//     v_BR = speed;
-//     v_FR = -speed;
-//     v_BL = speed;
+    SetMotorSpeed(FL, FR, BL, BR);
+    ApplyMotorSpeed();
+}
 
-//     SetMotorSpeed(v_FL, v_FR, v_BL, v_BR);
-// }
-// --------------------------------------------------------------------------
+void Chassis::SetMove(Vector2D dir, double speed) {
+    double ang = dir.GetAngleRad();
+    speed_X_ = speed * cos(ang);
+    speed_Y_ = speed * sin(ang);
+}
+
+void Chassis::SetRotate(double speed) { speed_Rotate_ = speed; }
