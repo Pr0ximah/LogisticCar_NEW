@@ -1,6 +1,7 @@
 #include "PID.h"
 
 #include <Arduino.h>
+#include "Geometry.h"
 
 void PID_Controller::SetIMax(double I_max) { I_max_ = I_max; }
 

@@ -26,10 +26,10 @@ public:
     double GetModule();
 
     // 获取X坐标
-    double GetX();
+    double GetX() const;
 
     // 获取Y坐标
-    double GetY();
+    double GetY() const;
 };
 
 // 角度转换弧度
@@ -37,5 +37,8 @@ double Deg2Rad(double deg);
 
 // 弧度转换角度
 double Rad2Deg(double rad);
+
+// 符号函数
+int Sign(double val);
 
 #endif  //_GEOMETRY_H

@@ -58,12 +58,4 @@ public:
     void SetOutputRange(double output_range);
 };
 
-int Sign(double val) {
-    if (val >= 0) {
-        return 1;
-    } else {
-        return -1;
-    }
-}
-
 #endif  //_PID_H
