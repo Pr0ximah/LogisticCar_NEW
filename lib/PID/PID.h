@@ -50,6 +50,10 @@ public:
     /// @return 输出量
     double GetOutput();
 
+    /// @brief 获取控制器目标量
+    /// @param target 系统目标量
+    void SetTarget(double);
+
     // 参数设置
     void SetParameters(double kp, double ki, double kd);
     void SetIMax(double I_max);

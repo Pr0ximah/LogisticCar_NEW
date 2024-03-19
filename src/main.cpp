@@ -11,8 +11,12 @@
 // 24.03.17
 #include "Chassis.h"
 #include "ConstDef.h"
+#include "IMU.h"
 
 void setup() {
+    // 初始化设置
+    IMU_Init();
+
     Serial.begin(9600);
     Chassis *c = Chassis::GetInstance();
     c->SetMove(Vector2D(0, 1), 40);

@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "PinDef.h"
+#include "IMU.h"
 
 Chassis *Chassis::instance_ptr_ = nullptr;
 
@@ -13,6 +14,10 @@ Chassis::Chassis() {
     pinMode(port_motor_FR, OUTPUT);
     pinMode(port_motor_BL, OUTPUT);
     pinMode(port_motor_BR, OUTPUT);
+
+    // heading PID参数初始化
+    heading_pid.SetParameters(heading_pid_param[0], heading_pid_param[1], heading_pid_param[2]);
+    heading_pid.SetPersistentControl(true);
 }
 
 Chassis *Chassis::GetInstance() {
@@ -123,6 +128,8 @@ void Chassis::UpdateChassis() {
     Serial.println(str);
     SetMotorSpeed(FL, FR, BL, BR);
     ApplyMotorSpeed();
+    heading_pid.UpdateController(IMU_Heading());
+    SetRotate(heading_pid.GetOutput());
 }
 
 void Chassis::SetMove(Vector2D dir, double speed) {
@@ -131,6 +138,7 @@ void Chassis::SetMove(Vector2D dir, double speed) {
     speed_X_ = speed * cos(ang);
     speed_Y_ = speed * sin(ang);
     String str = "speed_X: " + String(speed_X_) + ", speed_Y: " + String(speed_Y_);
+    heading_pid.SetTarget(IMU_Heading());
     Serial.println(str);
 }
 

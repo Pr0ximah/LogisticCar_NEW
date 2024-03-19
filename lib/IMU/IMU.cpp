@@ -1,5 +1,6 @@
 #include "IMU.h"
 
+#include <Arduino.h>
 #include <SoftwareSerial.h>
 #include "PinDef.h"
 
@@ -10,8 +11,7 @@ void IMU_Init() { SoftSerial.begin(9600); }
 
 double IMU_Heading() {
     int16_t Buffer[9];
-    bool valid_flag = False;
-    while (!valid_flag) {
+    while (true) {
         if (SoftSerial.find(0x55)) {
             for (int i = 0; i < 9; i++) {
                 while (!SoftSerial.available()) {
@@ -37,12 +37,4 @@ double IMU_Heading() {
         }
         delayMicroseconds(1);
     }
-}
-
-void print_0x_num(int16_t *arr, int len) {
-    for (int i = 0; i < len; i++) {
-        Serial.print(arr[i], HEX);
-        Serial.print(" ");
-    }
-    Serial.print("\n");
 }

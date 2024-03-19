@@ -2,6 +2,7 @@
 #define _CHASSIS_H
 
 #include "Geometry.h"
+#include "PID.h"
 
 /// @brief 底盘类，控制小车运动
 /// @date 2024.03.01
@@ -32,6 +33,10 @@ private:
 
     // 电机转速 (percent 0~100)
     double motor_speed_[4]{0, 0, 0, 0};
+
+    // heading PID控制器
+    PID_Controller heading_pid;
+    double heading_pid_param[3]{1, 0, 0};
 
     // 运动速度信息
     // ---------------------------------------------

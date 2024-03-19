@@ -3,6 +3,10 @@
 #include <Arduino.h>
 #include "Geometry.h"
 
+void PID_Controller::SetTarget(double target) {
+    target_ = target;
+}
+
 void PID_Controller::SetIMax(double I_max) { I_max_ = I_max; }
 
 void PID_Controller::SetJumpTime(int jump_time) { jump_time_ = jump_time; }
@@ -29,7 +33,7 @@ void PID_Controller::UpdateOutput() {
     error_diff_ = error_current_ - error_last_;
     P = kp_ * error_current_;
     D = kd_ * error_diff_;
-    if (abs(P) > I_range_ || Sign(error_integral_) != Sign(error_current_) || abs(error_current_) < error_tolerance_)) {
+    if (abs(P) > I_range_ || Sign(error_integral_) != Sign(error_current_) || abs(error_current_) < error_tolerance_) {
         error_integral_ = 0;
     }
     else {
