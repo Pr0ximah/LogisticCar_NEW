@@ -2,9 +2,11 @@
 #define _IMU_H
 
 #include <MPU6050.h>
+#include "Wire.h"
 class myIMU{
 private:
-    MPU6050 imu;
+    MPU6050 mpu;
+    static myIMU *instance_ptr_;
     double curTime=0;
     double lastTime=0;
     double angleSpeed;
@@ -12,6 +14,12 @@ private:
     double angleSpeed_bias;
     const double coe=65.5;
 public:
+    static myIMU *GetInstance(){
+        if (!instance_ptr_) {
+       instance_ptr_ = new myIMU;
+        }
+        return instance_ptr_;
+    }
     myIMU(){
         angleSpeed=0;
         angle =0;

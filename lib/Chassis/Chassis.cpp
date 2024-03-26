@@ -128,7 +128,7 @@ void Chassis::UpdateChassis() {
     Serial.println(str);
     SetMotorSpeed(FL, FR, BL, BR);
     ApplyMotorSpeed();
-    heading_pid.UpdateController(IMU_Heading());
+    heading_pid.UpdateController(myIMU::GetInstance()->getAngle());
     SetRotate(heading_pid.GetOutput());
 }
 
@@ -138,7 +138,7 @@ void Chassis::SetMove(Vector2D dir, double speed) {
     speed_X_ = speed * cos(ang);
     speed_Y_ = speed * sin(ang);
     String str = "speed_X: " + String(speed_X_) + ", speed_Y: " + String(speed_Y_);
-    heading_pid.SetTarget(IMU_Heading());
+    heading_pid.SetTarget(myIMU::GetInstance()->getAngle());
     Serial.println(str);
 }
 

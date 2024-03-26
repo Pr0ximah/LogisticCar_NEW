@@ -21,31 +21,14 @@
 #include "Chassis.h"
 #include "ConstDef.h"
 #include "IMU.h"
-
 void setup() {
     // 初始化设置
-    IMU_Init();
-
+    myIMU::GetInstance()->InitIMU();
     Serial.begin(9600);
-
-    // Chassis *c = Chassis::GetInstance();
-    // c->SetMove(Vector2D(0, 1), 40);
-    // int time_start = micros();
-    // while (true) {
-    //     if (micros() - time_start <= 1000000) {
-    //         c->UpdateChassis();
-    //     } else {
-    //         c->Stop();
-    //         delay(UPDATE_TIME_INTERVAL * 10);
-    //         break;
-    //     }
-    //     // c->UpdateChassis();
-    //     delay(UPDATE_TIME_INTERVAL);
-    // }
 }
 
 void loop() {
-    Serial.println(IMU_Heading());
+    Serial.println(myIMU::GetInstance()->getAngle());
     // IMU_Heading();
-    delay(1);
+    delay(500);
 }
